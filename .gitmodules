@@ -1,0 +1,9 @@
+[submodule "T34Dashboard/external/glfw"]
+	path = T34Dashboard/external/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "T34Dashboard/external/spdlog"]
+	path = T34Dashboard/external/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "T34Dashboard/external/imgui"]
+	path = T34Dashboard/external/imgui
+	url = https://github.com/ocornut/imgui.git
