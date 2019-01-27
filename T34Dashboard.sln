@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T34Dashboard", "T34Dashboard\T34Dashboard.vcxproj", "{772849F8-024B-4446-8F02-C83C70E89A5E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glfw", "T34Dashboard\ThirdParty\glfw\glfw.vcxproj", "{A73E8681-2963-4C7A-A97A-0030B026EC48}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,12 +19,6 @@ Global
 		{772849F8-024B-4446-8F02-C83C70E89A5E}.Release|x64.ActiveCfg = Release|x64
 		{772849F8-024B-4446-8F02-C83C70E89A5E}.Release|x64.Build.0 = Release|x64
 		{772849F8-024B-4446-8F02-C83C70E89A5E}.Release|x86.ActiveCfg = Release|x64
-		{A73E8681-2963-4C7A-A97A-0030B026EC48}.Debug|x64.ActiveCfg = Debug|x64
-		{A73E8681-2963-4C7A-A97A-0030B026EC48}.Debug|x64.Build.0 = Debug|x64
-		{A73E8681-2963-4C7A-A97A-0030B026EC48}.Debug|x86.ActiveCfg = Debug|x64
-		{A73E8681-2963-4C7A-A97A-0030B026EC48}.Release|x64.ActiveCfg = Release|x64
-		{A73E8681-2963-4C7A-A97A-0030B026EC48}.Release|x64.Build.0 = Release|x64
-		{A73E8681-2963-4C7A-A97A-0030B026EC48}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

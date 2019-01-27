@@ -13,29 +13,35 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Third Party">
+    <Filter Include="External">
       <UniqueIdentifier>{671a49dc-d34e-4508-8c41-460f2bc377ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Third Party\imgui">
+    <Filter Include="External\imgui">
       <UniqueIdentifier>{5031a6c2-8bd1-41ce-bc9c-da2221696fc4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Third Party\imgui\Header Files">
+    <Filter Include="External\imgui\Header Files">
       <UniqueIdentifier>{187b651b-4cdd-4ded-b75f-6be51867480c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Third Party\imgui\Source Files">
+    <Filter Include="External\imgui\Source Files">
       <UniqueIdentifier>{946055a7-8543-4d5d-a07a-8bca886b21c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Third Party\glew">
+    <Filter Include="External\glew">
       <UniqueIdentifier>{8425c8d4-0fbf-4d81-8583-16cc85f26022}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Third Party\glew\Header Files">
+    <Filter Include="External\glew\Header Files">
       <UniqueIdentifier>{fdc6549d-f82b-42a7-b03b-82479be02b15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Third Party\glew\Source Files">
+    <Filter Include="External\glew\Source Files">
       <UniqueIdentifier>{90e8810e-c394-4ab4-bfe4-f37f10b7a46a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Third Party\glfw">
-      <UniqueIdentifier>{89bca85a-a980-4cfa-b6fc-6b788bcb8868}</UniqueIdentifier>
+    <Filter Include="Widgets">
+      <UniqueIdentifier>{62477ae9-d599-4c8a-b052-1dab24f89fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Widgets\Header Files">
+      <UniqueIdentifier>{f57f6ca5-fcd4-468f-8fe4-8f73d7e11874}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Widgets\Source Files">
+      <UniqueIdentifier>{895535b8-04d0-4e70-b348-ec41cbb4d82f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -53,36 +59,6 @@
     </ClInclude>
     <ClInclude Include="LimitInstance.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\imgui\imgui\imconfig.h">
-      <Filter>Third Party\imgui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\imgui\imgui\imgui.h">
-      <Filter>Third Party\imgui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\imgui\imgui\imgui_internal.h">
-      <Filter>Third Party\imgui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\imgui\imgui\imstb_rectpack.h">
-      <Filter>Third Party\imgui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\imgui\imgui\imstb_textedit.h">
-      <Filter>Third Party\imgui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\imgui\imgui\imstb_truetype.h">
-      <Filter>Third Party\imgui\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\glew\GL\glew.h">
-      <Filter>Third Party\glew\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\glew\GL\wglew.h">
-      <Filter>Third Party\glew\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\imgui\imgui\imgui_impl_opengl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\imgui\imgui\imgui_impl_glfw.h">
-      <Filter>Third Party\imgui\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Editor.h">
       <Filter>Header Files</Filter>
@@ -108,20 +84,50 @@
     <ClInclude Include="fuid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Widgets\Renderable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Widgets\WindowWidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Widgets\TextWidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="crc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Widgets\Properties.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="external\glew\GL\wglew.h">
+      <Filter>External\glew\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\glew\GL\glew.h">
+      <Filter>External\glew\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imgui_impl_glfw.h">
+      <Filter>External\imgui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imgui_impl_opengl.h">
+      <Filter>External\imgui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imgui_internal.h">
+      <Filter>External\imgui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imstb_rectpack.h">
+      <Filter>External\imgui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imstb_textedit.h">
+      <Filter>External\imgui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imstb_truetype.h">
+      <Filter>External\imgui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imgui.h">
+      <Filter>External\imgui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imconfig.h">
+      <Filter>External\imgui\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="widgets\WindowWidget.h">
+      <Filter>Widgets\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="widgets\TextWidget.h">
+      <Filter>Widgets\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="widgets\Renderable.h">
+      <Filter>Widgets\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="widgets\Properties.h">
+      <Filter>Widgets\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,27 +143,6 @@
     <ClCompile Include="DashboardWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ThirdParty\imgui\imgui\imgui.cpp">
-      <Filter>Third Party\imgui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\imgui\imgui\imgui_demo.cpp">
-      <Filter>Third Party\imgui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\imgui\imgui\imgui_draw.cpp">
-      <Filter>Third Party\imgui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\imgui\imgui\imgui_widgets.cpp">
-      <Filter>Third Party\imgui\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\glew\GL\glew\glew.c">
-      <Filter>Third Party\glew\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\imgui\imgui\imgui_impl_opengl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\imgui\imgui\imgui_impl_glfw.cpp">
-      <Filter>Third Party\imgui\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -167,17 +152,38 @@
     <ClCompile Include="fuid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Widgets\TextWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Widgets\Renderable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="crc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Widgets\WindowWidget.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="external\glew\GL\glew\glew.c">
+      <Filter>External\glew\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui.cpp">
+      <Filter>External\imgui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_demo.cpp">
+      <Filter>External\imgui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_draw.cpp">
+      <Filter>External\imgui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_impl_glfw.cpp">
+      <Filter>External\imgui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_impl_opengl.cpp">
+      <Filter>External\imgui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_widgets.cpp">
+      <Filter>External\imgui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="widgets\TextWidget.cpp">
+      <Filter>Widgets\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="widgets\WindowWidget.cpp">
+      <Filter>Widgets\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="widgets\Renderable.cpp">
+      <Filter>Widgets\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

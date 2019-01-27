@@ -7,3 +7,6 @@
 [submodule "T34Dashboard/external/imgui"]
 	path = T34Dashboard/external/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "T34Dashboard/external/ntcore"]
+	path = T34Dashboard/external/ntcore
+	url = https://github.com/wpilibsuite/ntcore.git
