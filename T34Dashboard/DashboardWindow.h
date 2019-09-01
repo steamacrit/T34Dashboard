@@ -1,44 +1,36 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+class Dashboard;
+class Editor;
 
-#include "Dashboard.h"
-
-#include "Events/Event.h"
-
-using EventCallbackFn = std::function<void(Event&)>;
+struct GLFWwindow;
 
 class DashboardWindow
 {
 public:
-    DashboardWindow(bool windowed = false);
     ~DashboardWindow();
 
-    void Initialize(bool windowed);
-    
-    inline int GetWidth() { return m_data.width; }
-    inline int GetHeight() { return m_data.height; }
-    inline GLFWwindow * GetGLFWWindow() { return m_window; }
+    static std::shared_ptr<DashboardWindow> GetInstance();
+    bool Create(bool fullscreen = false);
+    void Destroy();
 
     int Run();
-
-    // Window attributes
-    inline void SetEventCallback(const EventCallbackFn & callback) { m_data.event_callback = callback; }
+    void Render();
 
 private:
+    static std::shared_ptr<DashboardWindow> m_instance;
     GLFWwindow * m_window;
+    bool m_glfw_initialized;
+    bool m_fullscreen;
+    float m_time;
 
-    struct WindowData
-    {
-        std::string title;
-        unsigned int width, height;
+    bool m_edit_mode;
+    std::unique_ptr<Editor> m_editor;
+    std::shared_ptr<Dashboard> m_dashboard;
 
-        EventCallbackFn event_callback;
-    };
+private:
+    DashboardWindow();
 
-    WindowData m_data;
-
-    std::unique_ptr<Dashboard> m_dashboard;
+    void OnResize(GLFWwindow * m_window, int32_t width, int32_t height);
 };
 

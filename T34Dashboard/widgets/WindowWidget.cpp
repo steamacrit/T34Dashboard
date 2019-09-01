@@ -2,14 +2,9 @@
 #include "WindowWidget.h"
 
 WindowWidget::WindowWidget(const std::string & title)
-    : Renderable(RenderableType::Window)
-    , m_flags(ImGuiWindowFlags_None)
+    : Widget(WidgetType::Window, &m_props)
     , m_title(title)
 {
-    m_props.pos_x.SetValue(0.0f);
-    m_props.pos_y.SetValue(0.0f);
-    m_props.size_w.SetValue(300.0f);
-    m_props.size_h.SetValue(300.0f);
 }
 
 WindowWidget::~WindowWidget()
@@ -35,8 +30,8 @@ void WindowWidget::Render()
     if (!GetIsVisible())
         return;
 
-    if (m_props.pos_x.HasChanged() || m_props.pos_y.HasChanged())
-        ImGui::SetNextWindowPos(ImVec2(m_props.pos_x.GetValue(), m_props.pos_y.GetValue()));
+    if (m_props.position_x.HasChanged() || m_props.position_y.HasChanged())
+        ImGui::SetNextWindowPos(ImVec2(m_props.position_x.GetValue(), m_props.position_y.GetValue()));
 
     if (m_props.size_w.HasChanged() || m_props.size_h.HasChanged())
         ImGui::SetNextWindowSize(ImVec2(m_props.size_w.GetValue(), m_props.size_h.GetValue()));
@@ -52,8 +47,8 @@ void WindowWidget::Render()
     }
 
     ImVec2 pos = ImGui::GetWindowPos();
-    m_props.pos_x.SetValueDirect(pos.x);
-    m_props.pos_y.SetValueDirect(pos.y);
+    m_props.position_x.SetValueDirect(pos.x);
+    m_props.position_y.SetValueDirect(pos.y);
 
     ImVec2 size = ImGui::GetWindowSize();
     m_props.size_w.SetValueDirect(size.x);
@@ -68,39 +63,19 @@ void WindowWidget::Render()
 void WindowWidget::RenderProperties()
 {
     ImVec2 frame_size = ImGui::GetIO().DisplaySize;
-    float & x = m_props.pos_x.GetValue();
-    float & y = m_props.pos_y.GetValue();
+    float & x = m_props.position_x.GetValue();
+    float & y = m_props.position_y.GetValue();
     float & w = m_props.size_w.GetValue();
     float & h = m_props.size_h.GetValue();
     bool & movable = m_props.fg_movable.GetValue();
     bool & resize = m_props.fg_resize.GetValue();
     bool & titlebar = m_props.fg_titlebar.GetValue();
 
-
-
     ImGui::Text("Name: %s", m_title.c_str());
     ImGui::BeginChild("Location:", ImVec2(300.0f, 100.0f), true);
-        ImGui::Columns(2);
-        ImGui::SetColumnWidth(0, 150);
-        ImGui::SetColumnWidth(1, 200);
-
-        ImGui::Text(m_props.pos_x.GetName().c_str());
-        ImGui::NextColumn();
-        m_props.pos_x.SetChanged(ImGui::SliderFloat("##X", &x, 0.0f, frame_size.x));
-
-        ImGui::NextColumn();
-        ImVec2 begin_line = ImGui::GetCursorPos();
-        ImVec2 end_line = begin_line;
-        end_line.x += 300.0f;
-        ImGui::GetWindowDrawList()->AddLine(begin_line, end_line, 1);
-
-        ImGui::Text(m_props.pos_y.GetName().c_str());
-        ImGui::NextColumn();
-        m_props.pos_y.SetChanged(ImGui::SliderFloat("##Y", &y, 0.0f, frame_size.y));
+        m_props.position_x.SetChanged(ImGui::SliderFloat("##X", &x, 0.0f, frame_size.x));
+        m_props.position_y.SetChanged(ImGui::SliderFloat("##Y", &y, 0.0f, frame_size.y));
         
-        ImGui::NextColumn();
-        ImGui::Text(m_props.fg_movable.GetName().c_str());
-        ImGui::NextColumn();
         if (ImGui::Checkbox("##Movable", &movable))
         {
             if (movable)

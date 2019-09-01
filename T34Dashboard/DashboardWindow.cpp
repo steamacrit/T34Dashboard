@@ -1,57 +1,77 @@
 #include "pch.h"
-#include "T34Dashboard.h"
 #include "DashboardWindow.h"
-#include "Events/ApplicationEvents.h"
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
+
+#include "Dashboard.h"
+#include "Editor.h"
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl.h>
 
-static bool s_glfw_initialized = false;
 
 void ErrorCallback(int error, const char * description)
 {
     LOG_ERROR("GLFW({0} - {1}", error, description);
 }
 
-DashboardWindow::DashboardWindow(bool windowed)
+std::shared_ptr<DashboardWindow> DashboardWindow::m_instance = nullptr;
+
+DashboardWindow::DashboardWindow()
+    : m_glfw_initialized(false)
+    , m_window(nullptr)
+    , m_edit_mode(false)
+    , m_dashboard(nullptr)
+    , m_editor(nullptr)
 {
-    Initialize(windowed);
 }
+
 
 DashboardWindow::~DashboardWindow()
 {
-    m_dashboard.reset();
+    Destroy();
     glfwTerminate();
 }
 
-void DashboardWindow::Initialize(bool windowed)
+std::shared_ptr<DashboardWindow> DashboardWindow::GetInstance()
 {
-    if (!windowed)
-        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+    if (m_instance == nullptr)
+        m_instance.reset(new DashboardWindow);
 
-    m_data.title = "FRC Team 34 Dashboard";
-    m_data.width = 1024;
-    m_data.height = 720;
+    return m_instance;
+}
 
-    LOG_INFO("Creating window {0} ({1}, {2})", m_data.title, m_data.width, m_data.height);
-
-    if (!s_glfw_initialized)
+bool DashboardWindow::Create(bool fullscreen)
+{
+    if (!m_glfw_initialized)
     {
-        // TODO: glfwTerminate on system shutdown
         int success = glfwInit();
         T34_ASSERT(success, "Could not intialize GLFW!");
         glfwSetErrorCallback(ErrorCallback);
-        s_glfw_initialized = true;
+        m_glfw_initialized = true;
     }
 
-    m_window = glfwCreateWindow(m_data.width, m_data.height, m_data.title.c_str(), nullptr, nullptr);
-    glfwMakeContextCurrent(m_window);
-    glfwSetWindowUserPointer(m_window, &m_data);
+    if (m_window != nullptr)
+        Destroy();
 
-//    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    if (fullscreen)
+        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
+    const char * title = "FRC Team 34 Dashboard";
+    int32_t width = 1024;
+    int32_t height = 720;
+
+    LOG_INFO("Creating window {0} ({1}, {2})", title, width, height);
+
+
+
+    m_window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+    glfwMakeContextCurrent(m_window);
+    glfwSetWindowUserPointer(m_window, this);
+
+    //    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSwapInterval(1); // Enable vsync
 
 
@@ -69,186 +89,207 @@ void DashboardWindow::Initialize(bool windowed)
 
     glEnable(GL_DEPTH_TEST);
 
-    m_dashboard.reset(new Dashboard(this));
+    // Set GLFW callbacks
 
-/*
+
+    /*
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(m_window, false);
     //ImGui_ImplGlfwGL3_Init(m_window, true);
     ImGui_ImplOpenGL3_Init("#version 130");
-*/
+    */
 
-/*
+    /*
 
-// Set GLFW callbacks
-    glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
-    {
-        WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-        data.width = width;
-        data.height = height;
 
-        WindowResizeEvent event(width, height);
-        data.event_callback(event);
-    });
 
     glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
     {
-        WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-        WindowCloseEvent event;
-        data.event_callback(event);
+    WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+    WindowCloseEvent event;
+    data.event_callback(event);
     });
 
     glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
     {
-        WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+    WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-        switch (action)
-        {
-        case GLFW_PRESS:
-        {
-            KeyPressedEvent event(key, 0);
-            data.event_callback(event);
-            break;
-        }
-        case GLFW_RELEASE:
-        {
-            KeyReleasedEvent event(key);
-            data.event_callback(event);
-            break;
-        }
-        case GLFW_REPEAT:
-        {
-            KeyPressedEvent event(key, 1);
-            data.event_callback(event);
-            break;
-        }
-        }
+    switch (action)
+    {
+    case GLFW_PRESS:
+    {
+    KeyPressedEvent event(key, 0);
+    data.event_callback(event);
+    break;
+    }
+    case GLFW_RELEASE:
+    {
+    KeyReleasedEvent event(key);
+    data.event_callback(event);
+    break;
+    }
+    case GLFW_REPEAT:
+    {
+    KeyPressedEvent event(key, 1);
+    data.event_callback(event);
+    break;
+    }
+    }
     });
 
     glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)
     {
-        WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+    WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-        switch (action)
-        {
-        case GLFW_PRESS:
-        {
-            MouseButtonPressedEvent event(button);
-            data.event_callback(event);
-            break;
-        }
-        case GLFW_RELEASE:
-        {
-            MouseButtonReleasedEvent event(button);
-            data.event_callback(event);
-            break;
-        }
-        }
+    switch (action)
+    {
+    case GLFW_PRESS:
+    {
+    MouseButtonPressedEvent event(button);
+    data.event_callback(event);
+    break;
+    }
+    case GLFW_RELEASE:
+    {
+    MouseButtonReleasedEvent event(button);
+    data.event_callback(event);
+    break;
+    }
+    }
     });
 
     glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xOffset, double yOffset)
     {
-        WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+    WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-        MouseScrolledEvent event((float)xOffset, (float)yOffset);
-        data.event_callback(event);
+    MouseScrolledEvent event((float)xOffset, (float)yOffset);
+    data.event_callback(event);
     });
 
     glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xPos, double yPos)
     {
-        WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+    WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-        MouseMovedEvent event((float)xPos, (float)yPos);
-        data.event_callback(event);
+    MouseMovedEvent event((float)xPos, (float)yPos);
+    data.event_callback(event);
     });
+    */
+
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
+    ImGui::GetIO().IniFilename = nullptr;
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+
+    ImGui_ImplOpenGL3_Init("#version 410");
+
+    glfwGetWindowSize(m_window, &width, &height);
+
+//    m_base_window.reset(new WindowWidget);
+//    m_base_window->SetFlags(ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs);
+
+//    m_base_window->SetPosition(0.0f, 0.0f);
+//    m_base_window->SetSize(width, height);
+
+    glfwSetWindowSizeCallback(m_window,
+        [](GLFWwindow * window, int32_t width, int32_t height)
+    {
+        DashboardWindow * win = (DashboardWindow *)glfwGetWindowUserPointer(window);
+        win->OnResize(window, width, height);
+    });
+
+/*
+    bool connected = false;
+    nt_inst = nt::NetworkTableInstance::GetDefault();
+    //nt_inst.StartServer();
+    //nt_inst.StartClient("");
+    nt_inst.
+        //nt_inst.StartDSClient();
+        connected = nt_inst.IsConnected();
+    nt_table = nt_inst.GetTable("Usage");
+    std::vector<nt::NetworkTableEntry> entries = nt_inst.GetEntries("/SmartDashboard/DB/", 0);
 */
+
+    m_time = 0.0f;
+
+    m_dashboard.reset(new Dashboard());
+    m_editor.reset(new Editor(m_dashboard));
+
+    return true;
+}
+
+void DashboardWindow::Destroy()
+{
+    if (m_window != nullptr)
+        glfwDestroyWindow(m_window);
+
+    m_window = nullptr;
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+}
+
+void DashboardWindow::OnResize(GLFWwindow * m_window, int32_t width, int32_t height)
+{
+//    m_base_window->SetSize(width, height);
+
+    ImGuiIO io = ImGui::GetIO();
+    io.DisplaySize.x = width;
+    io.DisplaySize.y = height;
 }
 
 int DashboardWindow::Run()
 {
-    ImVec4 clear_color = ImVec4(0.4f, 0.4f, 0.4f, 1.00f);
-/*
-    bool show_demo_window = true;
+    ImVec4 clear_color = ImVec4(1.0f, 0.7f, 0.0f, 1.00f);
 
-    //ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-    ImGuiIO & io = ImGui::GetIO(); (void)io;
-    //io.MouseDrawCursor = true;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableSetMousePos;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-
-*/    
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(m_window))
     {
-        /* Poll for and process events */
         glfwPollEvents();
 
-        
-/*
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        //ImGui_ImplGlfwGL3_NewFrame();
-        ImGui::NewFrame();
-
-        m_dashboard->Render();
-
-        //ImGui::ShowStyleEditor(nullptr);
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
- //       if (show_demo_window)
-//            ImGui::ShowDemoWindow(&show_demo_window);
-*/
-/*
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
-
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-
-
-        ImGui::Render();
-*/
         glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        m_dashboard->Render();
+        Render();
 
-//        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        /* Swap front and back buffers */
         glfwSwapBuffers(m_window);
-
     }
 
-/*
-    // Cleanup
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    //ImGui_ImplGlfwGL3_Shutdown();
-    ImGui::DestroyContext();
-*/
+
     return 0;
 }
 
+void DashboardWindow::Render()
+{
+    ImGuiIO & io = ImGui::GetIO();
+    int32_t w;
+    int32_t h;
 
+    glfwGetWindowSize(m_window, &w, &h);
+
+    io.DisplaySize = ImVec2((float)w, (float)h);
+
+    float time = (float)glfwGetTime();
+    io.DeltaTime = m_time > 0.0f ? (time - m_time) : (1.0f / 60.0f);
+    m_time = time;
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    m_edit_mode = true;
+
+    if (m_edit_mode)
+        m_editor->Render();
+    else
+        m_dashboard->Render();
+    
+
+
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}

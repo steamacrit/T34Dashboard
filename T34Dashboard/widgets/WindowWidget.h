@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Renderable.h"
+#include "Widget.h"
 #include <string>
 
-class WindowWidget : public Renderable
+class WindowWidget : public Widget
 {
 public:   
     WindowWidget(const std::string & title = "Debug");
@@ -12,11 +12,11 @@ public:
     inline const std::string & GetTitle() { return m_title; }
     inline void SetTitle(const std::string & title) { m_title = title; }
     inline void SetTitle(const char * title) { m_title = title; }
-    inline void SetFlags(ImGuiWindowFlags flags) { m_flags = m_flags; }
+    inline void SetFlags(ImGuiWindowFlags flags) { m_props.window_flags = flags; }
 
-    inline WID AddChild(Renderable * child) { assert(child); m_children[child->GetID()] = child; return child->GetID(); }
+    inline WID AddChild(Widget * child) { assert(child); m_children[child->GetID()] = child; return child->GetID(); }
     void RemoveChild(WID id);
-    inline void RemoveChild(Renderable * child) { assert(child); RemoveChild(child->GetID()); }
+    inline void RemoveChild(Widget * child) { assert(child); RemoveChild(child->GetID()); }
 
     void Render() override;
     void RenderProperties() override;
@@ -26,8 +26,7 @@ protected:
   
 private:
     std::string m_title;
-    ImGuiWindowFlags m_flags;
     WindowProperties m_props;
 
-    std::unordered_map<WID, Renderable *> m_children;
+    std::unordered_map<WID, Widget *> m_children;
 };

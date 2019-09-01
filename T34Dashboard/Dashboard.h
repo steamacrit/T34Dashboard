@@ -1,34 +1,25 @@
 #pragma once
 
-#include "Events/Event.h"
-#include "Editor.h"
-
-class DashboardWindow;
+class Event;
 class WindowWidget;
-
+struct GLFWwindow;
 
 class Dashboard
 {
 public:
-    Dashboard(DashboardWindow * window);
+    Dashboard(bool windowed = false);
     ~Dashboard();
-
-    void Render();
     
-
-    void OnEvent(Event & event);
-//    inline static void SetActiveWidget(Renderable * widget) { m_active_widget = widget; }
+    void Render();
 
 private:
-    DashboardWindow * m_window;
-    Editor m_editor;
-    bool m_edit_mode;
-    float m_Time = 0.0f;
 
-    bool mouse_dragging{ false };
 
-    std::unordered_map<WID, WindowWidget *> m_windows;
+    std::unique_ptr<WindowWidget> m_base_window;
 
-    
+private:
+    void Initialize(bool windowed = true);
+
+    void OnEvent(Event & event);
 };
 

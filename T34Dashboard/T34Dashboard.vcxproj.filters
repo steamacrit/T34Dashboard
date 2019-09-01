@@ -54,9 +54,6 @@
     <ClInclude Include="Dashboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DashboardWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="LimitInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -123,11 +120,14 @@
     <ClInclude Include="widgets\TextWidget.h">
       <Filter>Widgets\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="widgets\Renderable.h">
-      <Filter>Widgets\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="widgets\Properties.h">
       <Filter>Widgets\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="widgets\Widget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DashboardWindow.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -138,9 +138,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dashboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DashboardWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Editor.cpp">
@@ -182,8 +179,11 @@
     <ClCompile Include="widgets\WindowWidget.cpp">
       <Filter>Widgets\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="widgets\Renderable.cpp">
-      <Filter>Widgets\Source Files</Filter>
+    <ClCompile Include="widgets\Widget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DashboardWindow.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

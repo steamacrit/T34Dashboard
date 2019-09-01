@@ -1,10 +1,12 @@
 #include "pch.h"
+#include "Dashboard.h"
 #include "Editor.h"
-#include "Widgets/Renderable.h"
+#include "Widgets/Widget.h"
 
 #include <imgui/imgui.h>
 
-Editor::Editor()
+Editor::Editor(std::shared_ptr<Dashboard> dashboard)
+    : m_dashboard(dashboard)
 {
 }
 
@@ -15,9 +17,14 @@ Editor::~Editor()
 
 void Editor::Render()
 {
-    assert(m_widget);
-    
-    ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-    m_widget->RenderProperties();
-    ImGui::End();
+    ImGuiIO & io = ImGui::GetIO();
+
+
+    ImGui::BeginChild("DashboardEdit", ImVec2(io.DisplaySize.x, io.DisplaySize.y));// ("Properties", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::BeginChild("DashboardEdit2", ImVec2(io.DisplaySize.x, io.DisplaySize.y));// ("Properties", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+
+        m_dashboard->Render();
+//    m_widget->RenderProperties();
+    ImGui::EndChild();
+    ImGui::EndChild();
 }

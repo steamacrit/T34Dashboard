@@ -1,17 +1,16 @@
 #pragma once
 
-class Renderable;
+class Dashboard;
 
 class Editor
 {
 public:
-    Editor();
+    Editor(std::shared_ptr<Dashboard> dashboard);
     ~Editor();
 
-    inline void SetWidget(Renderable * widget) { m_widget = widget; }
     void Render();
 
 private:
-    Renderable * m_widget;
+    std::shared_ptr<Dashboard> m_dashboard;
 };
 

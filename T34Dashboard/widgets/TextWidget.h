@@ -1,22 +1,23 @@
 #pragma once
 
-#include "Renderable.h"
+#include "Widget.h"
 #include <string>
 
 
-class TextWidget : public Renderable
+class TextWidget : public BoundWidget
 {
 public:
     TextWidget(const std::string & text = "");
     ~TextWidget();
 
-    inline const std::string & GetText() const { return m_text; }
-
+    inline void SetText(const std::string & text) { m_props.text.SetValue(text); }
+    inline const std::string & GetText() { return m_props.text.GetValue(); }
+    
     void Render();
     void RenderProperties() override {};
 
 protected:
 
 private:
-    std::string m_text;
+    TextProperties m_props;
 };
